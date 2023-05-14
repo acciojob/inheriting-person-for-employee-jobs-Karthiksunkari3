@@ -1,29 +1,34 @@
-class Person {
-  constructor(name, age) {
-    this.name = name;
-    this.age = age;
-  }
-
-  greet() {
-    console.log(`Hello, my name is ${this.name}, I am ${this.age} years old.`);
-  }
+// Person constructor function
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
 }
 
-class Employee extends Person {
-  constructor(name, age, jobTitle) {
-    super(name, age);
-    this.jobTitle = jobTitle;
-  }
+// Adding greet() method to Person prototype
+Person.prototype.greet = function() {
+  console.log("Hello, my name is " + this.name + ", I am " + this.age + " years old.");
+};
 
-  jobGreet() {
-    console.log(`Hello, my name is ${this.name}, I am ${this.age} years old, and my job title is ${this.jobTitle}.`);
-  }
+// Employee constructor function
+function Employee(name, age, jobTitle) {
+  Person.call(this, name, age); // Call the Person constructor with the current context (this)
+  this.jobTitle = jobTitle;
 }
 
-// Example usage
-const person = new Person("John", 30);
-person.greet(); // Output: Hello, my name is John, I am 30 years old.
+// Inheriting the Person prototype in the Employee prototype
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
 
-const employee = new Employee("Jane", 25, "Manager");
-employee.greet(); // Output: Hello, my name is Jane, I am 25 years old.
-employee.jobGreet(); // Output: Hello, my name is Jane, I am 25 years old, and my job title is Manager.
+// Adding jobGreet() method to Employee prototype
+Employee.prototype.jobGreet = function() {
+  console.log("Hello, my name is " + this.name + ", I am " + this.age + " years old, and my job title is " + this.jobTitle + ".");
+};
+
+// Creating a Person instance and invoking greet() method
+var person = new Person("John Doe", 25);
+person.greet();
+
+// Creating an Employee instance and invoking greet() and jobGreet() methods
+var employee = new Employee("Jane Smith", 30, "Manager");
+employee.greet();
+employee.jobGreet();
